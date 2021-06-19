@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Covid data</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+
+            // Disabling the submit button on start
+            document.querySelector('#submit').disabled = true;
+
+            document.querySelector('#pincode').onkeyup = () => {
+
+                if (document.querySelector('#pincode').value.length == 6) {
+                    document.querySelector('#submit').disabled = false;
+                } else {
+                    document.querySelector('#submit').disabled = true;
+                }
+            }
+
+
+            document.querySelector('form').onsubmit = function() {
+
+                const pincode = document.querySelector('#pincode').value;
+                let date = document.querySelector('#date').value;
+
+                // changing format of date 
+                date = date.split("-").reverse().join("-");
+
+
+                fetch(`https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByPin?pincode=${pincode}&date=${date}`)
+                    .then(response => response.json())
+                    .then(data => {
+
+                        console.log(data);
+                        if (data.centers == 0) {
+                            document.querySelector('#vaccine').innerHTML = `Slot have not open yet for ${date} please try later or Pincode is incorrect.`;
+
+                            document.querySelector('#result').innerHTML = '';
+                            document.querySelector('#name').innerHTML = '';
+                            document.querySelector('#dose1').innerHTML = '';
+                            document.querySelector('#dose2').innerHTML = '';
+
+                        } else {
+
+
+                            let slot = data.centers[0].sessions[0].available_capacity;
+                            let dose1 = data.centers[0].sessions[0].available_capacity_dose1;
+                            let dose2 = data.centers[0].sessions[0].available_capacity_dose2;
+                            let vaccine = data.centers[0].sessions[0].vaccine;
+                            let name = data.centers[0].name;
+
+                            document.querySelector('#result').innerHTML = `Available slot ${slot}.`;
+                            document.querySelector('#vaccine').innerHTML = `Vaccine: ${vaccine}.`;
+                            document.querySelector('#name').innerHTML = name;
+                            document.querySelector('#dose1').innerHTML = `Dose 1: ${dose1}.`;
+                            document.querySelector('#dose2').innerHTML = `Dose 2: ${dose2}.`;
+
+                            slot = data.centers[1].sessions[0].available_capacity;
+                            dose1 = data.centers[1].sessions[0].available_capacity_dose1;
+                            dose2 = data.centers[1].sessions[0].available_capacity_dose2;
+                            vaccine = data.centers[1].sessions[0].vaccine;
+                            name = data.centers[1].name;
+
+                            document.querySelector('#result').innerHTML = `Available slot ${slot}.`;
+                            document.querySelector('#vaccine').innerHTML = `Vaccine: ${vaccine}.`;
+                            document.querySelector('#name').innerHTML = name;
+                            document.querySelector('#dose1').innerHTML = `Dose 1: ${dose1}.`;
+                            document.querySelector('#dose2').innerHTML = `Dose 2: ${dose2}.`;
+
+                            if (slot == 0) {
+                                document.querySelector('#vaccine').innerHTML = 'Check on different date.';
+
+                            }
+                        }
+
+
+
+                    }).catch(error => {
+                        console.log('Error', error);
+                    });
+
+                return false;
+
+            }
+        });
+    </script>
+</head>
+
+<body>
+    <form>
+        <input id="pincode" placeholder="Pincode" maxlength="6" minlength="6" type="number">
+        <input id="date" placeholder="Date" type="date">
+        <input id="submit" type="submit">
+    </form>
+    <div>
+        <p id="result">
+        </p>
+        <h3 id="vaccine" style="font-style: italic;"></h3>
+        <p id="name" style="font-style: oblique;"></p>
+        <p id="dose1"></p>
+        <p id="dose2"></p>
+    </div>
+</body>
+
+
+</html>
