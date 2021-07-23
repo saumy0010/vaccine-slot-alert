@@ -2,8 +2,13 @@
 <html lang="en">
 
 <head>
-    <title>Covid data</title>
+    <title>Covid-19</title>
+    <link rel="icon" type="png" href="title.png">
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="styles.css">
+    <script src="https://kit.fontawesome.com/2523d598bf.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 
     <!-- jQuery library -->
@@ -15,6 +20,20 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
 
+            // hiding the no data message on start
+
+            $(function() {
+                $("#not_found").hide();
+            });
+
+            $(function() {
+                $("#btn").hide();
+            });
+
+            $(function() {
+                $("#tab").hide();
+            });
+
 
             // Disabling the submit button on start
             document.querySelector('#submit').disabled = true;
@@ -23,8 +42,10 @@
             document.querySelector('#pincode').onkeyup = () => {
 
                 if (document.querySelector('#pincode').value.length == 6) {
+
                     document.querySelector('#submit').disabled = false;
                 } else {
+
                     document.querySelector('#submit').disabled = true;
                 }
             }
@@ -88,56 +109,74 @@
                 });
 
 
-
-
-
+                // fetching data from api 
                 fetch(`https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode=${pincode}&date=${date}`)
                     .then(response => response.json())
                     .then(data => {
 
-                        var container = document.querySelector('#container');
-                        var p = document.createElement('p');
+                        var count = 0;
 
-                        if (data.centers == 0) {
-                            alert('Vaccine is off')
-                            document.querySelector('#start').innerHTML = 'Booking have not started yet.';
+                        // refreshing the table value with null
+                        var vax = ''
+                        $("#data").html(vax);
+
+                        if (data.sessions == 0) {
+                            $(function() {
+                                $("#not_found").show();
+                            });
+                            $(function() {
+                                $("#tab").hide();
+                            });
                         } else {
-                            document.querySelector('#start').innerHTML = '';
 
+                            $(function() {
+                                $("#btn").hide();
+                            });
 
-                            // loop over the data
+                            $(function() {
+                                $("#tab").show();
+                            });
+
+                            $(function() {
+                                $("#not_found").hide();
+                            });
+
+                            // passing the vaccine data into html table
 
                             data.sessions.forEach(function(item) {
-                                var slot = document.createElement('h3');
-                                var name = document.createElement('span');
-                                var dose1 = document.createElement('span');
-                                var dose2 = document.createElement('span');
-                                var vaccine = document.createElement('span');
 
-                                slot.innerHTML = 'Available slots:' + item.available_capacity;
-                                name.innerHTML = item.name + '. <br/> ';
-                                vaccine.innerHTML = 'Vaccine:' + item.vaccine + '.<br/>';
-                                dose1.innerHTML = 'Dose 1: ' + item.available_capacity_dose1 + '. <br/> ';;
-                                dose2.innerHTML = 'Dose 2: ' + item.available_capacity_dose2;
+                                count += item.available_capacity;
 
-                                p.appendChild(slot);
-                                p.appendChild(name);
-                                p.appendChild(vaccine);
-                                p.appendChild(dose1);
-                                p.appendChild(dose2);
+                                vax += `
+                                <tr>
+                                    <td>${item.address}</td>
+                                    <td>${item.vaccine}</td>
+                                    <td>${item.available_capacity_dose1}</td>
+                                    <td>${item.available_capacity_dose2}</td>
+                                </tr>
+                
+                                `
+                                $("#data").html(vax);
 
                             });
 
-                            info.appendChild(p);
+                            if (count == 0) {
+                                $(function() {
+                                    $("#btn").show();
+                                });
+                            } else {
+                                $(function() {
+                                    $("#btn").hide();
+                                });
+                            }
+                            count = 0;
                         }
 
                     }).catch(error => {
                         console.log('Error', error);
                     });
 
-
                 return false;
-
             }
         });
     </script>
@@ -160,13 +199,14 @@
                 <div class="collapse navbar-collapse" id="micon">
                     <ul class="nav navbar-nav navbar-right">
                         <li>
-                            <a href="#">Home</a>
+                            <a href="#"><i class="fas fa-home fa-lg" style="color: #0074D9;"></i></i> Home</i>
+                            </a>
                         </li>
                         <li>
-                            <a href="#">About</a>
+                            <a href="#about"><i class="fas fa-info fa-lg" style="color: #0074D9;"></i> About</a>
                         </li>
                         <li>
-                            <a href="#">Contact</a>
+                            <a href="https://sp8795.github.io/" target="_blank"><i class="fas fa-user-circle fa-lg" style="color: #0074D9;"></i> My Portfolio</a>
                         </li>
 
                     </ul>
@@ -175,6 +215,8 @@
 
         </nav>
     </header>
+
+    <!-- Animation on top is here -->
     <div class="container anmi-shadow">
         <div class="col-sm-12 col-md-9">
             <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
@@ -183,7 +225,7 @@
         </div>
         <div class="col-sm-12 col-md-3">
             <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-            <lottie-player src="https://assets7.lottiefiles.com/packages/lf20_ikyhq0rk.json" background="transparent" speed="1" style="width: 200px; height: 150px; padding-top: 50px;" loop autoplay></lottie-player>
+            <lottie-player src="https://assets7.lottiefiles.com/packages/lf20_ikyhq0rk.json" background="transparent" speed="1" style="width: 200px; height: 150px; padding-top: 50px; margin: 0 auto;" loop autoplay></lottie-player>
 
             <a href="https://selfregistration.cowin.gov.in/" target="_blank">
                 <button class="reg">Register</button>
@@ -191,32 +233,98 @@
         </div>
 
     </div>
+    <!-- Input field -->
     <div class="container">
+
         <div class="input-box col-sm-12">
+
+            <h1 style="text-align: center; font-style:normal;">Check Your Nearest Vaccination Center And Slots Availability</h1>
+            <br>
+
+            <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+            <lottie-player src="https://assets1.lottiefiles.com/packages/lf20_Fl9YWn.json" background="transparent" speed="1" style="width: 200px; height: 200px; margin: 0 auto;" autoplay></lottie-player>
+
             <form>
-                <input class="pincode" id="pincode" placeholder="Pincode" maxlength="6" minlength="6" type="number">
+                <input class="pincode" id="pincode" placeholder="Pincode" maxlength="6" minlength="6" type="text">
+                <br><br>
                 <input id="date" placeholder="Date" type="date">
-                <input id="submit" type="submit">
+                <br><br><br>
+                <input class="btn-check" id="submit" type="submit" value="Search">
             </form>
         </div>
     </div>
 
-    <div class="container">
+    <div class="container anmi-shadow" id="not_found">
+        <div class="col-sm-12">
 
-        <div class="col-sm-6" id="info">
-            <h2 id="start"></h2>
-        </div>
-
-        <div class="col-sm-6">
-            <button id="btn" class="button" onclick="this.classList.toggle('button--loading')">
-            <span class="button--text ">Set reminder</span>
-            </button>
-        </div>
-        <div>
-            <br>
-            <br>
+            <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+            <lottie-player src="https://assets8.lottiefiles.com/packages/lf20_r71cen62.json" background="transparent" speed="1" style="width: 100%; height: 300px;" loop autoplay></lottie-player>
+            <h1 style="text-align: center;">Sorry we did't find any releted data </h1>
         </div>
     </div>
+    <!--Data printing here-->
+    <div class="container anmi-shadow" id="tab">
+        <div class="col-sm-12 col-md-9">
+
+            <table class="table table-hover">
+                <thead class="th">
+                    <tr>
+                        <th>Address</th>
+                        <th>Vaccine</th>
+                        <th>Dose-1</th>
+                        <th>Dose-2</th>
+                    </tr>
+                </thead>
+                <tbody id="data">
+
+                </tbody>
+            </table>
+        </div>
+        <div class="col-sm-12 col-md-3">
+
+            <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+            <lottie-player src="https://assets10.lottiefiles.com/packages/lf20_vewnyqdu.json" background="transparent" speed="1" style="width: 300px; height: 300px;" loop autoplay></lottie-player>
+
+        </div>
+    </div>
+    <br><br>
+    <div class="container">
+        <div class="col-sm-12">
+            <button id="btn" class="button" onclick="this.classList.toggle('button--loading')">
+            <span class="button--text">Set reminder</span>
+        </button>
+        </div>
+    </div>
+    <br>
+    <br>
+
+    <!--footer part vro-->
+    <footer class="footer">
+        <div class="container cont-foot">
+            <div class="row row-foot">
+                <div class="footer-col">
+                    <h4>About me</h4>
+                    <ul>
+                        <li>
+                            <a href="#about">Saumy Pandey</a>
+                            <a href="#about">Aspiring Web Developer</a>
+                            <a href="#about">BBDU, Lucknow</a>
+                            <a href="#about">s8795p@gmail.com</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="footer-col" id="about">
+                    <h4>Follow me</h4>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/subham.pandey.372019" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.instagram.com/_bahubali_7/" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.linkedin.com/in/saumy-pandey-0010/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </footer>
 </body>
 
 </html>
