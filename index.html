@@ -19,41 +19,6 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            /*
-            
-            // first we will fethch the api data from the api.
-
-            async function recieve() {
-                // API url 
-                var total_vax = '';
-                const url = `https://api.covid19india.org/v4/min/data.min.json`;
-
-                // Now fetching the data using the above API.
-                var total = 0;
-                const headers = await fetch(url);
-                let data = await headers.json();
-
-                for (var states in data) {
-                    let state = data[states];
-                    for (var district in state.districts) {
-                        let details = state.districts[district];
-                        if (typeof(details.total.vaccinated1) != "undefined") {
-                            total += Number(`${details.total.vaccinated1}`);
-
-                        }
-
-                    }
-
-                }
-                total_vax = `${total + 100000000}`;
-                $("#total_vax").html(total_vax);
-                console.log(total + 100000000);
-            }
-
-            recieve();
-
-
-            */
 
             // hiding the no data message on start
 
@@ -358,10 +323,10 @@
                 <div class="footer-col" id="about">
                     <h4>Follow me</h4>
                     <div class="social-links">
-                        <a href="https://github.com/sp8795" target="_blank"><i class="fab fa-github"></i></a>
+                        <a href="https://github.com/saumy0010" target="_blank"><i class="fab fa-github"></i></a>
                         <a href="https://www.instagram.com/_bahubali_7/" target="_blank"><i class="fab fa-instagram"></i></a>
                         <a href="https://www.linkedin.com/in/saumy-pandey-0010/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="https://sp8795.github.io/" target="_blank"><i class="far fa-user"></i></a>
+                        <a href="https://saumy0010.github.io/" target="_blank"><i class="far fa-user"></i></a>
 
                     </div>
                 </div>
