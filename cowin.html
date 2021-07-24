@@ -19,6 +19,41 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            /*
+            
+            // first we will fethch the api data from the api.
+
+            async function recieve() {
+                // API url 
+                var total_vax = '';
+                const url = `https://api.covid19india.org/v4/min/data.min.json`;
+
+                // Now fetching the data using the above API.
+                var total = 0;
+                const headers = await fetch(url);
+                let data = await headers.json();
+
+                for (var states in data) {
+                    let state = data[states];
+                    for (var district in state.districts) {
+                        let details = state.districts[district];
+                        if (typeof(details.total.vaccinated1) != "undefined") {
+                            total += Number(`${details.total.vaccinated1}`);
+
+                        }
+
+                    }
+
+                }
+                total_vax = `${total + 100000000}`;
+                $("#total_vax").html(total_vax);
+                console.log(total + 100000000);
+            }
+
+            recieve();
+
+
+            */
 
             // hiding the no data message on start
 
@@ -63,7 +98,8 @@
 
                 // api url
                 const api_url =
-                    `https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode=${pincode}&date=${date}`;
+                    `
+                                https: //cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode=${pincode}&date=${date}`;
 
                 // Defining async function
 
@@ -120,13 +156,18 @@
                         var vax = ''
                         $("#data").html(vax);
 
-                        if (data.sessions == 0) {
+
+                        if (data.sessions == 0 || data.errorCode == "APPOIN0018") {
                             $(function() {
                                 $("#not_found").show();
                             });
                             $(function() {
                                 $("#tab").hide();
                             });
+                            $(function() {
+                                $("#btn").hide();
+                            });
+
                         } else {
 
                             $(function() {
@@ -233,6 +274,7 @@
         </div>
 
     </div>
+
     <!-- Input field -->
     <div class="container">
 
