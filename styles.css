@@ -66,7 +66,7 @@
         color: #ffffff;
         padding: 8px 16px;
         font: bold 20px 'Quicksand', sans-serif;
-        margin: 90px 0px 10px 70px;
+        margin: 90px auto 10px 70px;
         ;
     }
     
@@ -113,7 +113,7 @@
     /* changing table header color to dark and text color to white*/
     
     .th {
-        background: #333;
+        background: #24262b;
         color: #efefef;
     }
     /*  table radious setting*/
