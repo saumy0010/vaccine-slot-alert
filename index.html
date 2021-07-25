@@ -27,6 +27,10 @@
             });
 
             $(function() {
+                $("#date_empty").hide();
+            });
+
+            $(function() {
                 $("#btn").hide();
             });
 
@@ -62,9 +66,7 @@
 
 
                 // api url
-                const api_url =
-                    `
-                                https: //cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode=${pincode}&date=${date}`;
+                const api_url = `https: //cdn-api.co-vin.in/api/v2/appointment/sessions/public/findByPin?pincode=${pincode}&date=${date}`;
 
                 // Defining async function
 
@@ -121,8 +123,22 @@
                         var vax = ''
                         $("#data").html(vax);
 
+                        if (data.errorCode == "USRRES0001") {
+                            $(function() {
+                                $("#date_empty").show();
+                            });
 
-                        if (data.sessions == 0 || data.errorCode == "APPOIN0018") {
+                            $(function() {
+                                $("#not_found").hide();
+                            });
+                            $(function() {
+                                $("#tab").hide();
+                            });
+                            $(function() {
+                                $("#btn").hide();
+                            });
+
+                        } else if (data.sessions == 0 || data.errorCode == "APPOIN0018") {
                             $(function() {
                                 $("#not_found").show();
                             });
@@ -131,6 +147,10 @@
                             });
                             $(function() {
                                 $("#btn").hide();
+                            });
+
+                            $(function() {
+                                $("#date_empty").hide();
                             });
 
                         } else {
@@ -145,6 +165,10 @@
 
                             $(function() {
                                 $("#not_found").hide();
+                            });
+
+                            $(function() {
+                                $("#date_empty").hide();
                             });
 
                             // passing the vaccine data into html table
@@ -229,6 +253,8 @@
             <lottie-player src="https://assets7.lottiefiles.com/packages/lf20_p2evb1ab.json" background="transparent" speed="1" style="width: 100%; height: 400px;" loop autoplay></lottie-player>
 
         </div>
+
+        <!--Register button-->
         <div class="col-sm-12 col-md-3">
             <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
             <lottie-player src="https://assets7.lottiefiles.com/packages/lf20_ikyhq0rk.json" background="transparent" speed="1" style="width: 200px; height: 150px; padding-top: 50px; margin: 0 auto;" loop autoplay></lottie-player>
@@ -269,6 +295,21 @@
             <h1 style="text-align: center;">Sorry we did't find any related data </h1>
         </div>
     </div>
+
+    <!--if user not select date-->
+
+
+    <div class="container anmi-shadow" id="date_empty">
+        <div class="col-sm-12">
+
+            <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+            <lottie-player src="https://assets2.lottiefiles.com/packages/lf20_ytg7s6tx.json" background="transparent" speed="1" style="width: 100%; height: 300px;" loop autoplay></lottie-player>
+            <h1 style="text-align: center;">You must select date</h1>
+        </div>
+    </div>
+
+
+
     <!--Data printing here-->
     <div class="container anmi-shadow" id="tab">
         <div class="col-sm-12 col-md-9">
